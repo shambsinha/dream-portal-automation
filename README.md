@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Dream Portal UI Test Automation Framework
 
 A production-ready, comprehensive UI test automation framework for the Dream Portal application built with **Playwright** and **TypeScript**.
@@ -441,3 +442,6 @@ MIT License - Feel free to use and modify
 
 **Built with ❤️ by QA Automation Team**
 
+=======
+# dream-portal-automation
+>>>>>>> 17acc39dcffac86f791ae4187922ce5c9c0d34ba
