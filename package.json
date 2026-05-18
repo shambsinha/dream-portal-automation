@@ -1,0 +1,39 @@
+{
+  "name": "dream-portal-ui-test-automation",
+  "version": "1.0.0",
+  "description": "Production-ready UI test automation framework for Dream Portal using Playwright with TypeScript",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report",
+    "test:chrome": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:webkit": "playwright test --project=webkit",
+    "test:all-browsers": "playwright test --project=chromium --project=firefox --project=webkit",
+    "codegen": "playwright codegen https://arjitnigam.github.io/myDreams/",
+    "install-browsers": "playwright install"
+  },
+  "keywords": [
+    "playwright",
+    "typescript",
+    "ui-automation",
+    "test-automation",
+    "qa",
+    "page-object-model"
+  ],
+  "author": "QA Automation Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.1",
+    "@types/node": "^20.10.6",
+    "typescript": "^5.3.3",
+    "dotenv": "^16.3.1"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "openai": "^4.24.2"
+  }
+}
+
