@@ -4,6 +4,7 @@
   "description": "Production-ready UI test automation framework for Dream Portal using Playwright with TypeScript",
   "scripts": {
     "test": "playwright test",
+    "test:ci": "playwright test",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "test:ui": "playwright test --ui",
@@ -13,7 +14,7 @@
     "test:webkit": "playwright test --project=webkit",
     "test:all-browsers": "playwright test --project=chromium --project=firefox --project=webkit",
     "codegen": "playwright codegen https://arjitnigam.github.io/myDreams/",
-    "install-browsers": "playwright install"
+    "install-browsers": "playwright install --with-deps"
   },
   "keywords": [
     "playwright",

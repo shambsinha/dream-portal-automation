@@ -16,9 +16,12 @@ test.describe('Dreams Summary Page Tests', () => {
 
   test.afterEach(async () => {
     Logger.section('Cleaning up after test');
-    if (!page.isClosed()) {
-      await page.close();
+    if (!page) {
+      Logger.warn('No browser page was created; skipping cleanup');
+      return;
     }
+
+    await page.context().close();
     Logger.success('Cleanup complete');
   });
 

@@ -10,15 +10,19 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    env:
+      CI: true
+
     strategy:
       matrix:
         node-version: [18.x, 20.x]
+      fail-fast: false
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v5
 
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v5
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
@@ -27,24 +31,34 @@ jobs:
       run: npm ci
 
     - name: Install Playwright browsers
-      run: npm run install-browsers
+      run: npx playwright install --with-deps
 
     - name: Run tests
-      run: npm test
+      run: npx playwright test
+
+    - name: Ensure report directories exist
+      if: always()
+      run: |
+        mkdir -p test-results
+        mkdir -p playwright-report
 
     - name: Upload test results
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v6
+      continue-on-error: true
       with:
-        name: playwright-report-node-${{ matrix.node-version }}
+        name: test-results-node-${{ matrix.node-version }}
         path: test-results/
         retention-days: 30
+        if-no-files-found: ignore
 
-    - name: Upload coverage
+    - name: Upload HTML report
       if: always()
-      uses: codecov/codecov-action@v3
+      uses: actions/upload-artifact@v6
+      continue-on-error: true
       with:
-        directory: ./test-results
-        flags: unittests
-        name: codecov-umbrella
+        name: html-report-node-${{ matrix.node-version }}
+        path: playwright-report/
+        retention-days: 30
+        if-no-files-found: ignore
 

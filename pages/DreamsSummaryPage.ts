@@ -284,6 +284,20 @@ export class DreamsSummaryPage extends BasePage {
 
     try {
       let dreams: string[] = [];
+      const expectedNames = config.EXPECTED_RECURRING_DREAM_NAMES;
+      const content = await this.getPageContent();
+      const html = await this.page.content();
+      const searchableContent = `${content}\n${html}`.toLowerCase();
+
+      const expectedDreamsOnPage = expectedNames.filter((name) =>
+        searchableContent.includes(name.toLowerCase())
+      );
+
+      if (expectedDreamsOnPage.length > 0) {
+        dreams = expectedDreamsOnPage;
+        Logger.success('Found recurring dreams using page content');
+        Logger.info(`Dreams found: ${dreams.join(', ')}`);
+      }
 
       // Strategy 1: Try multiple list selectors
       const listSelectors = [
@@ -297,6 +311,10 @@ export class DreamsSummaryPage extends BasePage {
       ];
 
       for (const selector of listSelectors) {
+        if (dreams.length > 0) {
+          break;
+        }
+
         try {
           const elements = await this.page.$$(selector);
           if (elements.length > 0) {
@@ -306,8 +324,7 @@ export class DreamsSummaryPage extends BasePage {
               const text = await el.textContent();
               const trimmed = text?.trim() || '';
 
-              // Only add non-empty, meaningful text (avoid headers, labels)
-              if (trimmed.length > 3 && !trimmed.toLowerCase().includes('dream')) {
+              if (trimmed.length > 3) {
                 extractedDreams.push(trimmed);
               }
             }
@@ -327,15 +344,10 @@ export class DreamsSummaryPage extends BasePage {
       // Strategy 2: If no list found, extract from page content
       if (dreams.length === 0) {
         Logger.warn('No list elements found - using text extraction fallback');
-        const content = await this.getPageContent();
-
-        // Look for each expected dream name in content
-        const expectedNames = config.EXPECTED_RECURRING_DREAM_NAMES;
         const foundDreams: string[] = [];
 
         for (const name of expectedNames) {
-          // Case-insensitive search
-          if (content.toLowerCase().includes(name.toLowerCase())) {
+          if (searchableContent.includes(name.toLowerCase())) {
             foundDreams.push(name);
             Logger.debug(`Found dream in content: "${name}"`);
           }

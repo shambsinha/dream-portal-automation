@@ -15,13 +15,13 @@ test.describe('Home Page Tests', () => {
 
   test.afterEach(async () => {
     Logger.section('Cleaning up after test');
-    const context = page.context();
-    const allPages = context.pages();
-    for (const p of allPages) {
-      if (!p.isClosed()) {
-        await p.close();
-      }
+    if (!page) {
+      Logger.warn('No browser page was created; skipping cleanup');
+      return;
     }
+
+    const context = page.context();
+    await context.close();
     Logger.success('Cleanup complete');
   });
 
